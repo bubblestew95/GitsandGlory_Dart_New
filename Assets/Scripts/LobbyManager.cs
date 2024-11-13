@@ -31,9 +31,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    public override void OnDisconnected(DisconnectCause cause)
+    public override void OnDisconnected(DisconnectCause _cause)
     {
-        Debug.LogWarningFormat("Disconnted Cause : {0}", cause);
+        Debug.LogWarningFormat("Disconnted Cause : {0}", _cause);
     }
     public override void OnConnectedToMaster()
     {
@@ -47,9 +47,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     }
 
     // 랜덤 방 입장에 실패했을 때
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    public override void OnJoinRandomFailed(short _returnCode, string _message)
     {
-        Debug.LogFormat("JoinRandomRoom Failed({0}) : {1}", returnCode, message);
+        Debug.LogFormat("JoinRandomRoom Failed({0}) : {1}", _returnCode, _message);
 
         // 새로운 방을 생성한다. 그리고 해당 방의 방장이 된다.
         CreateNewRoom();
