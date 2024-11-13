@@ -31,6 +31,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.LogWarningFormat("Disconnted Cause : {0}", cause);
+    }
     public override void OnConnectedToMaster()
     {
         Debug.LogFormat("Connected To Master : {0}", nickName);
@@ -38,7 +42,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // Todo : 로비 UI를 끈다.
 
         // 랜덤한 방으로 들어간다.
-        // 만약 들어갈 수 있는 방이 없다면 방을 새로 만들고 해당 방의 방장이 되면서 들어간다.
+        // 만약 들어갈 수 있는 방이 없다면 OnJoinRandomFailed 호출됨.
         PhotonNetwork.JoinRandomRoom();
     }
 
@@ -47,7 +51,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.LogFormat("JoinRandomRoom Failed({0}) : {1}", returnCode, message);
 
-        // 새로운 방을 생성한다.
+        // 새로운 방을 생성한다. 그리고 해당 방의 방장이 된다.
         CreateNewRoom();
     }
 
