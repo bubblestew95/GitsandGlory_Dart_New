@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Left Room");
 
-        // Todo : 로비 씬으로 다시 돌아가기.
-        // SceneManager.LoadScene("");
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("Title_Lobby");
     }
     #endregion
 

@@ -9,20 +9,18 @@ using Photon.Realtime;
 /// </summary>
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    // 로비 -> 게임 대기실로 들어가는 버튼
     [SerializeField]
-    private Button gameRoomEnterBtn = null;
+    private GameObject titleGo = null;
 
-    // 마스터가 게임 대기실 -> 게임 시작하는 버튼
     [SerializeField]
-    private Button gameStartBtn = null;
+    private GameObject lobbyGo = null;
 
     // 한 방의 최대 플레이어 수
     private int maxPlayerPerRoom = 4;
     // 게임 버전
     private string gameVersion = "0.0.1";
     // 플레이어의 닉네임
-    private string nickName = string.Empty;
+    private string nickName = "TestName";
 
     #region CallbackFunctions
     private void Awake()
@@ -39,8 +37,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.LogFormat("Connected To Master : {0}", nickName);
 
-        // Todo : 로비 UI를 끈다.
-
+        // 닉네임을 설정
+        PhotonNetwork.NickName = nickName;
         // 랜덤한 방으로 들어간다.
         // 만약 들어갈 수 있는 방이 없다면 OnJoinRandomFailed 호출됨.
         PhotonNetwork.JoinRandomRoom();
@@ -59,12 +57,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         // Todo List
-        // 대기실 UI를 켠다.
-        // 대기실의 플레이어 리스트를 갱신한다. (RPC?)
-
+        // 타이틀 UI를 끈다.
+        titleGo?.SetActive(false);
+        // 로비 UI를 켠다.
+        lobbyGo?.SetActive(true);
+        // 로비의 플레이어 리스트를 갱신한다. (RPC?)
     }
     #endregion
 
+    // 대기실로 입장
     public void EnterToWaitingRoom()
     {
         // 닉네임을 입력해야 함.
