@@ -18,6 +18,11 @@ public class Dart : MonoBehaviour
     private Vector3 startPos = Vector3.zero;
     private Vector3 endPos = Vector3.zero;
 
+    public Vector2 EndPosition
+    {
+        get { return new Vector2(endPos.x, endPos.y);}
+    }
+
     // startPos ~ endPos 로 일직선 발사 시작
     // 추후에 포물선 발사 구현 가능?
     public void ThrowDart(Vector3 _startPos, Vector3 _endPos)
@@ -46,5 +51,7 @@ public class Dart : MonoBehaviour
 
             yield return null;
         }
+
+
     }
 }
