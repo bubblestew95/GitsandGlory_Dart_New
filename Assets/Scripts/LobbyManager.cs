@@ -10,17 +10,23 @@ using Photon.Realtime;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     [SerializeField]
+    private Button titleToRoomBtn = null;
+
+    [SerializeField]
     private GameObject titleGo = null;
 
     [SerializeField]
     private GameObject lobbyGo = null;
+
+    [SerializeField]
+    private LobbyUIManager lobbyUIManager = null;
 
     // 한 방의 최대 플레이어 수
     private int maxPlayerPerRoom = 4;
     // 게임 버전
     private string gameVersion = "0.0.1";
     // 플레이어의 닉네임
-    private string nickName = "TestName";
+    private string nickName = string.Empty;
 
     #region CallbackFunctions
     private void Awake()
@@ -37,8 +43,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         Debug.LogFormat("Connected To Master : {0}", nickName);
 
-        // 닉네임을 설정
-        PhotonNetwork.NickName = nickName;
         // 랜덤한 방으로 들어간다.
         // 만약 들어갈 수 있는 방이 없다면 OnJoinRandomFailed 호출됨.
         PhotonNetwork.JoinRandomRoom();
@@ -62,19 +66,30 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // 로비 UI를 켠다.
         lobbyGo?.SetActive(true);
         // 로비의 플레이어 리스트를 갱신한다. (RPC?)
+        photonView.RPC("UpdateNicknameUIs", RpcTarget.All);
+    }
+
+    public override void OnLeftRoom()
+    {
+        photonView.RPC("UpdateNicknameUIs", RpcTarget.Others);
     }
     #endregion
 
     // 대기실로 입장
     public void EnterToWaitingRoom()
     {
+        nickName = lobbyUIManager.CurNickName;
+
         // 닉네임을 입력해야 함.
         if (string.IsNullOrEmpty(nickName))
             return;
 
+        PhotonNetwork.NickName = nickName;
+        titleToRoomBtn.interactable = false;
+
         // 포톤 네트워크에 접속된 상태 == 어떤 방에서 게임을 끝낸 뒤 다시 로비로 돌아온 상황
         // 새로 접속할 필요는 없으니까 랜덤한 방 하나를 들어간다.
-        if(PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.JoinRandomRoom();
         }
@@ -82,7 +97,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             Debug.LogFormat("Connect : {0}", gameVersion);
             PhotonNetwork.GameVersion = gameVersion;
-            
+
             // 포톤 네트워크로 접속 시도.
             // 접속에 성공하면 OnConnectedToMaster 호출
             PhotonNetwork.ConnectUsingSettings();
@@ -98,6 +113,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         // 같은 방에 있는 클라이언트들에게 게임 씬을 로드하도록 한다.
         PhotonNetwork.LoadLevel("Game");
+    }
+
+
+    [PunRPC]
+    public void UpdateNicknameUIs()
+    {
+        string[] curRoomNickNames = new string[maxPlayerPerRoom];
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; ++i)
+        {
+            curRoomNickNames[i] = PhotonNetwork.PlayerList[i].NickName;
+            Debug.Log(curRoomNickNames[i]);
+        }
+
+        lobbyUIManager.UpdateNicknameUIs(curRoomNickNames);
     }
 
     private void CreateNewRoom()
