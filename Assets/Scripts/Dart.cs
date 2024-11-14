@@ -1,7 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class Dart : MonoBehaviour
+using Photon.Pun;
+
+public class Dart : MonoBehaviourPun
 {
     // 다트의 시작점에서 끝점까지 움직이는 데 걸리는 시간
     [SerializeField]
@@ -10,8 +12,6 @@ public class Dart : MonoBehaviour
     // 포물선 궤적의 최대 높이
     [SerializeField]
     private float parabolaMaxHeight = 2f;
-
-    private float dartBoardZPos = 0f;
 
     private Vector3 dir = Vector3.zero;
     private Vector3 startPos = Vector3.zero;

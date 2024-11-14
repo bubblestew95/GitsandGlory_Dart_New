@@ -34,17 +34,15 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - ApplyPlayerList
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - ChangeTurnToNextPlayer
-  - UpdateNicknameUIs
-  - ThrowDart
-  - ApplyPlayerList
   - NextRound
-  - ThrowDarte
+  - PlayerThrowDart
+  - RespawnSpaceship
+  - UpdateNicknameUIs
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

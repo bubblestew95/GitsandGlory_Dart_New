@@ -43,6 +43,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         get { return instance; }
     }
 
+    public Dart LastThrowedDart
+    {
+        get { return lastThrowedDart; }
+    }
+
     public bool IsGameOver
     {
         get { return isGameOver; }
@@ -88,45 +93,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 턴을 잡은 캐릭터가 도중에 나갈 경우 처리해야 함.
         if (!PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerKeyValue))
             return;
-
-
-        //// 마우스 왼 쪽 버튼 클릭 시 다트를 던진다.
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    // 다음 라운드가 준비되지 않았다면 리턴
-        //    if (!isNextRoundReady)
-        //        return;
-
-        //    // 라운드 진행됨. 다음 라운드는 아직 준비되지 않음.
-        //    isNextRoundReady = false;
-
-        //    Vector3 dartThrowPos = Vector3.zero;
-
-        //    {
-        //        dartThrowPos = Camera.main.ScreenToWorldPoint(
-        //            new Vector3(Input.mousePosition.x,
-        //            Input.mousePosition.y,
-        //            -Camera.main.transform.position.z)
-        //            );
-        //        dartThrowPos.z = -20f;
-        //    }// 스크린 상 마우스 포지션을 다트 투척 시작점으로 설정. 추후 조준점 UI 생길 시 해당 위치로 업데이트 예정.
-            
-        //    // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
-        //    GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", Vector3.zero, Quaternion.identity);
-
-        //    photonView.RPC("ThrowDart", RpcTarget.All, dartGo.GetComponent<Dart>(), dartThrowPos);
-
-        //    // 다트를 던지면 라운드를 1 올린다.
-        //    ++roundCnt;
-
-        //    // 3라운드가 지난다면 턴이 넘어간다.
-        //    if(roundCnt > 3)
-        //    {
-        //        photonView.RPC("ChangeTurnToNextPlayer", RpcTarget.All);
-        //    }
-
-        //    StartCoroutine(RoundReadyCoroutine());
-        //}
     }
 
     public override void OnPlayerLeftRoom(Player _otherPlayer)
@@ -155,24 +121,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.LeaveRoom();
     }
-
-    ///// <summary>
-    ///// 다트 오브젝트를 생성 후 Dart 스크립트의 ThrowDart 메소드를 호출한다.
-    ///// </summary>
-    ///// <param name="_spawnPos">다트의 시작 지점.</param>
-    //[PunRPC]
-    //public void ThrowDart(Dart _dart, Vector3 _spawnPos)
-    //{
-    //    lastThrowedDart = _dart;
-
-    //    lastThrowedDart.ThrowDart(_spawnPos, new Vector3(_spawnPos.x, _spawnPos.y, 0f));
-    //}
-
-    //// 마지막에 던진 다트의 도착점 좌표
-    //public Vector2 GetLastDartEndPos()
-    //{
-    //    return lastThrowedDart.EndPosition;
-    //}
 
     // 턴을 다음 플레이어에게 넘긴다.
     public void ChangeTurnToNextPlayer()
@@ -210,6 +158,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void NextRound()
     {
         ++roundCnt;
+
+        Debug.LogFormat("Next Round : {0}", roundCnt);
 
         StartCoroutine(RoundReadyCoroutine());
 
@@ -295,5 +245,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
             }
         }
+    }
+
+    [PunRPC]
+    public void UpdateLastDart()
+    {
+
     }
 }
