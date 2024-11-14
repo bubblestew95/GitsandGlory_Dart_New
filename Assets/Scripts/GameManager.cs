@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Button backToLobbyBtn = null;
 
+    [SerializeField]
+    private GameObject dartPrefab = null;
+
     // 현재 턴 수
     private int turnCnt = 1;
     // 현재 턴의 플레이어 키값.
@@ -20,6 +23,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         // Todo : 현재 방의 정보에 따라서 점수판 닉네임 UI를 업데이트한다.
+    }
+
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x,
+                Input.mousePosition.y, 
+                -Camera.main.transform.position.z)
+                );
+
+            mousePos.z = -25f;
+
+            ThrowDart(mousePos);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player _otherPlayer)
@@ -42,6 +61,16 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("Leave Room");
 
         PhotonNetwork.LeaveRoom();
+    }
+
+    // 다트를 던진다.
+    public void ThrowDart(Vector3 _spawnPos)
+    {
+        // GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", _spawnPos, Quaternion.identity);
+        GameObject dartGo = Instantiate<GameObject>(dartPrefab, _spawnPos, Quaternion.identity);
+        Dart dart = dartGo.GetComponent<Dart>();
+
+        dart.ThrowDart(_spawnPos, new Vector3(_spawnPos.x, _spawnPos.y, 0f));
     }
 
     // 턴을 다음 플레이어에게 넘긴다.

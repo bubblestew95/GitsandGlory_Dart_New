@@ -4,9 +4,9 @@ using UnityEngine;
 public class Dart : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 5f;
+    private float speed = 1f;
 
-    private float dartBoardZPos = 10f;
+    private float dartBoardZPos = 0f;
 
     private Vector3 dir = Vector3.zero;
 
