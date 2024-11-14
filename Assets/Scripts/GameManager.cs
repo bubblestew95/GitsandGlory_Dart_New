@@ -7,18 +7,19 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    // 다시 로비로 돌아가는 버튼
     [SerializeField]
-    private Button gameExitBtn = null;
+    private Button backToLobbyBtn = null;
 
-    // 현재 턴
+    // 현재 턴 수
     private int turnCnt = 1;
     // 현재 턴의 플레이어 키값.
-    private int curTurnPlayerNum = 1;
+    private int curTurnPlayerKeyValue = 1;
 
     #region CallbackFunctions
     private void Start()
     {
-        // Todo : 현재 플레이어의 정보에 따라서 점수판 UI를 업데이트한다. (닉네임...)
+        // Todo : 현재 방의 정보에 따라서 점수판 닉네임 UI를 업데이트한다.
     }
 
     public override void OnPlayerLeftRoom(Player _otherPlayer)
@@ -57,14 +58,21 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
+        // 턴이 넘어갔으므로, 다음 턴 플레이어를 찾는다.
         do
         {
-            ++curTurnPlayerNum;
-            if (curTurnPlayerNum > PhotonNetwork.CurrentRoom.MaxPlayers) return;
+            ++curTurnPlayerKeyValue;
+            // 다음 턴 플레이어 탐색 중에 최대 범위를 벗어나버리면 게임 종료 호출하면서 탈출.
+            if (curTurnPlayerKeyValue > PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                EndGame();
+                return;
+            }
 
-        } while (PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerNum));
+        } while (PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerKeyValue));
     }
 
+    // 게임 끝. 게임 기능 비활성화하고 순위를 출력한다.
     private void EndGame()
     {
         // 게임 기능은 비활성화한다.
