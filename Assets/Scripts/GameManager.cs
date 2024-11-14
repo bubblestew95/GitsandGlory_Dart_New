@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 현재 턴의 플레이어 키값.
     private int curTurnPlayerKeyValue = 1;
 
+    private Dart lastThrowedDart = null;
+
+    // 게임 오버 체크
     private bool isGameOver = false;
 
     #region CallbackFunctions
@@ -106,9 +109,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         // GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", _spawnPos, Quaternion.identity);
         GameObject dartGo = Instantiate<GameObject>(dartPrefab, _spawnPos, Quaternion.identity);
-        Dart dart = dartGo.GetComponent<Dart>();
+        lastThrowedDart = dartGo.GetComponent<Dart>();
 
-        dart.ThrowDart(_spawnPos, new Vector3(_spawnPos.x, _spawnPos.y, 0f));
+        lastThrowedDart.ThrowDart(_spawnPos, new Vector3(_spawnPos.x, _spawnPos.y, 0f));
+    }
+
+    // 마지막에 던진 다트의 도착점 좌표
+    public Vector2 GetLastDartEndPos()
+    {
+        return lastThrowedDart.EndPosition;
     }
 
     // 턴을 다음 플레이어에게 넘긴다.
