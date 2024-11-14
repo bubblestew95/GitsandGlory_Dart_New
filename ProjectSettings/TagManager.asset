@@ -3,9 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - BullsEye
-  - BullsEyeAround
+  tags: []
   layers:
   - Default
   - TransparentFX
