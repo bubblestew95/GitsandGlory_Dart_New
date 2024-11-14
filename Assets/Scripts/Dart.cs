@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Dart : MonoBehaviour
 {
@@ -51,7 +50,5 @@ public class Dart : MonoBehaviour
 
             yield return null;
         }
-
-
     }
 }

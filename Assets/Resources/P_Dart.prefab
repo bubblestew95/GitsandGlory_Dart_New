@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9156414864286860738}
   - component: {fileID: 8407563152828371341}
   - component: {fileID: 6435074402486114259}
+  - component: {fileID: -2692116605716781225}
   m_Layer: 0
   m_Name: P_Dart
   m_TagString: Untagged
@@ -99,4 +100,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e23418c8a8b8f5449584d0616753627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  arrivedTime: 1
+  parabolaMaxHeight: 2
+--- !u!114 &-2692116605716781225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8259765405376756802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 0}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
