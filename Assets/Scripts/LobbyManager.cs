@@ -66,9 +66,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         // 로비 UI를 켠다.
         lobbyGo?.SetActive(true);
         // 로비의 플레이어 리스트를 갱신한다. (RPC?)
-        photonView.RPC("UpdateNicknames", RpcTarget.All);
+        photonView.RPC("UpdateNicknameUIs", RpcTarget.All);
     }
 
+    public override void OnLeftRoom()
+    {
+        photonView.RPC("UpdateNicknameUIs", RpcTarget.Others);
+    }
     #endregion
 
     // 대기실로 입장
@@ -113,7 +117,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    public void UpdateNicknames()
+    public void UpdateNicknameUIs()
     {
         string[] curRoomNickNames = new string[maxPlayerPerRoom];
 

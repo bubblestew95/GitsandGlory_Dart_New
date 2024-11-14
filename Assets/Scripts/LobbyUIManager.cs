@@ -1,10 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 using Photon.Pun;
-using System.Collections.Generic;
-using UnityEditor;
 
 public class LobbyUIManager : MonoBehaviourPun
 {

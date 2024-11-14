@@ -7,6 +7,10 @@ using Photon.Realtime;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     #region CallbackFunctions
+    private void Start()
+    {
+    }
+
     public override void OnPlayerLeftRoom(Player _otherPlayer)
     {
         Debug.LogFormat("Player Left Room : {0}", _otherPlayer.NickName);
