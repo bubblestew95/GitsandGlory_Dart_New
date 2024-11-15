@@ -111,6 +111,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient)
             return;
 
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+
         // 같은 방에 있는 클라이언트들에게 게임 씬을 로드하도록 한다.
         PhotonNetwork.LoadLevel("Game");
     }
