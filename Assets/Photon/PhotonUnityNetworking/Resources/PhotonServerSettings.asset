@@ -46,6 +46,7 @@ MonoBehaviour:
   - UpdateLastDart
   - SetDartStartPos
   - UpdateLastDartEndPoint
+  - UpdateScores
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
