@@ -43,6 +43,6 @@ public class UIManager : MonoBehaviour
 
     public void ShowResultUI()
     {
-        resultUI.enabled = true;
+        resultUI.gameObject.SetActive(true);
     }
 }

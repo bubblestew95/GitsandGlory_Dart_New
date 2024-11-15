@@ -22,9 +22,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Pointer pointerUI = null;
 
-    /// <summary>
-    /// 플레이어 컨트롤러 오브젝트 배열
-    /// </summary>
     [SerializeField]
     private PlayerController[] arr_PlayerCont = null;
 
@@ -320,10 +317,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             playerRankIdxs[rankIdx] = i;
         }
         // 계산한 등수를 토대로 게임 오버 UI를 갱신한다.
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; ++i)
         {
-            int rank = playerRankIdxs[i];
-            UIManager.Instance.SetResultUI(rank, PhotonNetwork.CurrentRoom.Players[rank].NickName, scoreTotals[rank]);
+            int rankIdx = playerRankIdxs[i];
+            UIManager.Instance.SetResultUI(rankIdx, PhotonNetwork.CurrentRoom.Players[rankIdx + 1].NickName, scoreTotals[rankIdx]);
         }
 
         // 게임 오버 UI 출력

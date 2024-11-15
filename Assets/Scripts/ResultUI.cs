@@ -8,6 +8,6 @@ public class ResultUI : MonoBehaviour
 
     public void SetResultTexts(int _rank, string _name, int _score)
     {
-        text_resultScores[_rank - 1].text += string.Format(" {0} {1}", _name, _score);
+        text_resultScores[_rank].text += string.Format(" {0} {1}", _name, _score);
     }
 }

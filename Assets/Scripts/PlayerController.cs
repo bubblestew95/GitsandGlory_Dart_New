@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviourPun
         {
             {
                 dartStartPos = GameManager.Instance.PointerUI.GetPointerWorldPos();
-                dartStartPos.z = -20f;
+                dartStartPos.z = -25f;
             }
 
             photonView.RPC("SetDartStartPos", RpcTarget.Others, dartStartPos);
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviourPun
             int score = GameManager.Instance.ScoreEvaluate.EvaluateScore(dartEndPos);
 
             // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
-            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.identity);
+            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.Euler(-89.9f, 0f, 0f));
 
             // 다트 투척
             dartGo.GetComponent<Dart>().ThrowDart(dartStartPos, dartEndPos);
