@@ -4,6 +4,7 @@ using Photon.Pun;
 
 public class PlayerController : MonoBehaviourPun
 {
+
     private Dart throwedDart = null;
 
     private Vector3 dartStartPos = Vector3.zero;
@@ -43,6 +44,9 @@ public class PlayerController : MonoBehaviourPun
             // 다트의 도착점
             Vector3 dartEndPos = new Vector3(dartStartPos.x, dartStartPos.y, 0f);
 
+            // 다트의 도착점을 기준으로 점수를 계산함.
+            int score = GameManager.Instance.ScoreEvaluate.EvaluateScore(dartEndPos);
+
             // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
             GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.identity);
 
@@ -52,8 +56,8 @@ public class PlayerController : MonoBehaviourPun
             // 마지막으로 던진 다트의 도착점을 갱신
             GameManager.Instance.photonView.RPC("UpdateLastDartEndPoint", RpcTarget.All, dartEndPos);
 
-            // 다트를 던지면 라운드를 진행했다고 게임 매니저에게 알림.
-            GameManager.Instance.RoundComplete();
+            // 다트를 던지면 이번 라운드가 끝났다고 게임 매니저에게 알림.
+            GameManager.Instance.RoundComplete(score);
         }
     }
 

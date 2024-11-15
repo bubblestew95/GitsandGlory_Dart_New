@@ -24,7 +24,7 @@ public class LobbyUIManager : MonoBehaviourPun
             nickNameTexts[i].text = string.Format("Player {0}: {1}", i + 1, _nickNames[i]);
         }
 
-        nickNameTexts[_hilightedIdx].color = Color.yellow;
+        // nickNameTexts[_hilightedIdx].color = Color.yellow;
     }
 
     // 타이틀 화면에서 닉네임 인풋필드 변경 시 바인딩

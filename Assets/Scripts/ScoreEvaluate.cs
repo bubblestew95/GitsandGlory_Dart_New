@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ScoreEvaluate
 {
-
     private Vector2 coordinate = Vector2.zero;
 
     private float length = 0;
