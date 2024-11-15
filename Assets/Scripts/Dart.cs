@@ -1,19 +1,25 @@
 using System.Collections;
 using UnityEngine;
 
-public class Dart : MonoBehaviour
-{
-    [SerializeField]
-    private float speed = 5f;
+using Photon.Pun;
 
-    private float dartBoardZPos = 10f;
+public class Dart : MonoBehaviourPun
+{
+    // 다트의 시작점에서 끝점까지 움직이는 데 걸리는 시간
+    [SerializeField]
+    private float arrivedTime = 1f;
+
+    // 포물선 궤적의 최대 높이
+    [SerializeField]
+    private float parabolaMaxHeight = 2f;
 
     private Vector3 dir = Vector3.zero;
+    private Vector3 startPos = Vector3.zero;
+    private Vector3 endPos = Vector3.zero;
 
-    // 다트 판까지의 거리 측정을 위한 디버깅 스피어 그리기
-    private void OnDrawGizmos()
+    public Vector2 EndPosition
     {
-        Gizmos.DrawSphere(new Vector3(0f, 0f, dartBoardZPos), 2f);
+        get { return new Vector2(endPos.x, endPos.y);}
     }
 
     // startPos ~ endPos 로 일직선 발사 시작
@@ -21,6 +27,8 @@ public class Dart : MonoBehaviour
     public void ThrowDart(Vector3 _startPos, Vector3 _endPos)
     {
         dir = (_endPos - _startPos).normalized;
+        startPos = _startPos;
+        endPos = _endPos;
 
         StartCoroutine(DartFlyingCoroutine());
     }
@@ -28,9 +36,17 @@ public class Dart : MonoBehaviour
     // 다트 발사 중 이동 코루틴
     private IEnumerator DartFlyingCoroutine()
     {
-        while(transform.position.z < dartBoardZPos)
+        //float gravity = 9.8f;
+        //float v0 = 11.0f;
+        //Vector3 curPos = Vector3.zero;
+
+        float ratio = 0f;
+
+        while (ratio <= arrivedTime)
         {
-            transform.Translate(dir * speed * Time.deltaTime);
+            transform.position = Vector3.Lerp(startPos, endPos, ratio);
+
+            ratio += Time.deltaTime / arrivedTime;
 
             yield return null;
         }

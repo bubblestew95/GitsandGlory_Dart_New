@@ -28,19 +28,24 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: jp
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - ApplyPlayerList
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
   - Fire
+  - NextRound
+  - PlayerThrowDart
   - RespawnSpaceship
-  - ChangeTurnToNextPlayer
   - UpdateNicknameUIs
+  - UpdateLastDart
+  - SetDartStartPos
+  - UpdateLastDartEndPoint
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
