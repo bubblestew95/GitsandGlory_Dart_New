@@ -44,11 +44,23 @@ public class Dart : MonoBehaviourPun
     // 다트 발사 중 이동 코루틴
     private IEnumerator DartFlyingCoroutine()
     {
+        //float gravity = 9.8f;
+        //float v0 = 11.0f;
+        //Vector3 curPos = Vector3.zero;
+
+        Vector3 center = (startPos + endPos) * 0.5f;
+        center.y -= 10;
+        startPos -= center;
+        endPos -= center;
+
+        
         float ratio = 0f;
 
         while (ratio <= arrivedTime)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, ratio);
+            //transform.position = Vector3.Lerp(startPos, endPos, ratio);
+            transform.position = Vector3.Slerp(startPos, endPos, ratio);
+            transform.position += center;
 
             ratio += Time.deltaTime / arrivedTime;
 
