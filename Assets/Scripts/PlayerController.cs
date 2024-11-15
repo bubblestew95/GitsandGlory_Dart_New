@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
-    private Dart throwedDart = null;
-
     private Vector3 dartStartPos = Vector3.zero;
     public int PlayerActorNum
     {

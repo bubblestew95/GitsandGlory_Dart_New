@@ -9,15 +9,8 @@ public class Dart : MonoBehaviourPun
     [SerializeField]
     private float arrivedTime = 0.5f;
 
-    // 포물선 궤적의 최대 높이
-    [SerializeField]
-    private float parabolaMaxHeight = 2f;
-
     [SerializeField]
     private AudioClip throwSound = null;
-
-    [SerializeField]
-    private AudioClip hitSound = null;
 
     private Vector3 dir = Vector3.zero;
     private Vector3 startPos = Vector3.zero;
@@ -44,38 +37,27 @@ public class Dart : MonoBehaviourPun
     // 다트 발사 중 이동 코루틴
     private IEnumerator DartFlyingCoroutine()
     {
-        //float gravity = 9.8f;
-        //float v0 = 11.0f;
-        //Vector3 curPos = Vector3.zero;
-
         Vector3 center = (startPos + endPos) * 0.5f;
         center.y -= 20;
 
         Vector3 _start = startPos - center;
         Vector3 _end = endPos - center;
 
+        Quaternion startQuat = Quaternion.Euler(-45f, 0f, 0f);
+        Quaternion endQuat = Quaternion.Euler(45f, 0f, 0f);
+
         float ratio = 0f;
 
         while (ratio <= 1f)
         {
-            //transform.position = Vector3.Lerp(startPos, endPos, ratio);
-            Vector3 nextPos = Vector3.Slerp(_start, _end, ratio) + center;
+            transform.position = Vector3.Slerp(_start, _end, ratio) + center;
 
-            //Vector3 dir = (nextPos - transform.position).normalized;
-            transform.rotation = Quaternion.Slerp(transform.rotation,
-                                                  Quaternion.Euler(-transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z),
-                                                  ratio);
-
-            transform.position = nextPos;
-
-            // transform.rotation = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(startQuat, endQuat, ratio);
 
             ratio += Time.deltaTime / arrivedTime;
 
             yield return null;
         }
-
-        photonView.RPC("PlayHitAudio", RpcTarget.All);
     }
 
     [PunRPC]
@@ -83,19 +65,8 @@ public class Dart : MonoBehaviourPun
     {
         if(throwSound)
         {
-            // Bgm 없으면 이거
             GameManager.Instance.AudioSrc.PlayOneShot(throwSound);
         }
 
-    }
-
-    [PunRPC]
-    private void PlayHitAudio()
-    {
-        if(hitSound)
-        {
-            // Bgm 없으면 이거
-            GameManager.Instance.AudioSrc.PlayOneShot(hitSound);
-        }
     }
 }

@@ -828,7 +828,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrivedTime: 1
-  parabolaMaxHeight: 2
   throwSound: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
   hitSound: {fileID: 0}
 --- !u!114 &7523202424058466111
