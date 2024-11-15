@@ -1,10 +1,10 @@
 using UnityEngine;
 
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
-
     private Dart throwedDart = null;
 
     private Vector3 dartStartPos = Vector3.zero;
@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviourPun
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("Game");
+        }
         // 게임이 끝난 상태면 리턴
         if (GameManager.Instance.IsGameOver) 
             return;
@@ -53,6 +57,8 @@ public class PlayerController : MonoBehaviourPun
             // 다트 투척
             dartGo.GetComponent<Dart>().ThrowDart(dartStartPos, dartEndPos);
 
+            // 다트 투척 오디오 재생
+
             // 마지막으로 던진 다트의 도착점을 갱신
             GameManager.Instance.photonView.RPC("UpdateLastDartEndPoint", RpcTarget.All, dartEndPos);
 
@@ -66,10 +72,4 @@ public class PlayerController : MonoBehaviourPun
     {
         dartStartPos = _pos;
     }
-
-    //마지막에 던진 다트의 도착점 좌표
-    //public Vector2 GetLastDartEndPos()
-    //{
-    //    return lastThrowedDart.EndPosition;
-    //}
 }

@@ -47,6 +47,9 @@ MonoBehaviour:
   - SetDartStartPos
   - UpdateLastDartEndPoint
   - UpdateScores
+  - PlayThrowAudio
+  - PlayHitSound
+  - PlayHitAudio
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

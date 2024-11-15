@@ -11,18 +11,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     private static GameManager instance = null;
 
     /// <summary>
-    /// 다시 로비로 돌아가는 버튼
-    /// </summary>
-    [SerializeField]
-    private Button backToLobbyBtn = null;
-
-    /// <summary>
     /// 조준점 UI 스크립트
     /// </summary>
     [SerializeField]
     private Pointer pointerUI = null;
 
-    [SerializeField]
     private PlayerController[] arr_PlayerCont = null;
 
     /// <summary>
@@ -81,6 +74,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// </summary>
     private bool isNextRoundReady = true;
 
+    private AudioSource audioSrc = null;
+
     #region Properties
     public static GameManager Instance
     {
@@ -111,6 +106,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         get { return scoreEvaluate; }
     }
+
+    public AudioSource AudioSrc
+    {
+        get { return audioSrc; }
+    }
     #endregion
 
     #region CallbackFunctions
@@ -123,6 +123,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         arr_PlayerCont = new PlayerController[4];
         scoreEvaluate = new ScoreEvaluate();
+        audioSrc = GetComponent<AudioSource>();
 
         playerScores = new int[4, 3];
 
@@ -143,6 +144,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             UIManager.Instance.UpdatePlayerName(i, PhotonNetwork.CurrentRoom.Players[i + 1].NickName);
         }
+
+        audioSrc.Play();
     }
 
     public override void OnPlayerLeftRoom(Player _otherPlayer)
