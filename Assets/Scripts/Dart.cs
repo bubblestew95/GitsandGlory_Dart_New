@@ -53,13 +53,16 @@ public class Dart : MonoBehaviourPun
         startPos -= center;
         endPos -= center;
 
-        
         float ratio = 0f;
 
         while (ratio <= arrivedTime)
         {
             //transform.position = Vector3.Lerp(startPos, endPos, ratio);
             transform.position = Vector3.Slerp(startPos, endPos, ratio);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                  Quaternion.LookRotation(endPos, startPos),
+                                                  Time.deltaTime);
+
             transform.position += center;
 
             ratio += Time.deltaTime / arrivedTime;
