@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Button backToLobbyBtn = null;
 
+    // 조준점 UI 스크립트
+    [SerializeField]
+    private Pointer pointerUI = null;
+
     // 플레이어 컨트롤러 오브젝트 배열
     [SerializeField]
     private PlayerController[] arr_PlayerCont = null;
@@ -56,6 +60,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int CurrentTurnPlayerActorNum
     {
         get{ return curTurnPlayerActorNum; }
+    }
+
+    public Pointer PointerUI
+    {
+        get { return pointerUI; }
     }
 
     #region CallbackFunctions
