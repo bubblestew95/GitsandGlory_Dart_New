@@ -5,6 +5,9 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPun
 {
     private Dart throwedDart = null;
+
+    private Vector3 dartStartPos = Vector3.zero;
+
     public int PlayerActorNum
     {
         get; set;
@@ -31,35 +34,39 @@ public class PlayerController : MonoBehaviourPun
         // 마우스 왼 쪽 버튼 클릭 시 다트를 던진다.
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 dartThrowPos = Vector3.zero;
-
             {
-                dartThrowPos = Camera.main.ScreenToWorldPoint(
+                dartStartPos = Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x,
                     Input.mousePosition.y,
                     -Camera.main.transform.position.z)
                     );
-                dartThrowPos.z = -20f;
+                dartStartPos.z = -20f;
             }// 스크린 상 마우스 포지션을 다트 투척 시작점으로 설정. 추후 조준점 UI 생길 시 해당 위치로 업데이트 예정.
 
-            // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
-            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartThrowPos, Quaternion.identity);
+            photonView.RPC("SetDartStartPos", RpcTarget.Others, dartStartPos);
 
-            photonView.RPC("PlayerThrowDart", RpcTarget.All, dartThrowPos);
+            // 다트의 도착점
+            Vector3 dartEndPos = new Vector3(dartStartPos.x, dartStartPos.y, 0f);
+
+            // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
+            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.identity);
+
+            // 다트 투척
+            dartGo.GetComponent<Dart>().ThrowDart(dartStartPos, dartEndPos);
+            // photonView.RPC("PlayerThrowDart", RpcTarget.All, dartThrowPos);
+
+            // 마지막으로 던진 다트의 도착점을 갱신
+            GameManager.Instance.photonView.RPC("UpdateLastDartEndPoint", RpcTarget.All, dartEndPos);
 
             // 다트를 던지면 라운드를 진행했다고 게임 매니저에게 알림.
             GameManager.Instance.RoundComplete();
         }
     }
 
-    // <summary>
-    // 다트 오브젝트를 생성 후 Dart 스크립트의 ThrowDart 메소드를 호출한다.
-    // </summary>
-    // <param name = "_spawnPos" > 다트의 시작 지점.</param>
     [PunRPC]
-    public void PlayerThrowDart(Vector3 _spawnPos)
+    private void SetDartStartPos(Vector3 _pos)
     {
-        _dart.ThrowDart(_spawnPos, new Vector3(_spawnPos.x, _spawnPos.y, 0f));
+        dartStartPos = _pos;
     }
 
     //마지막에 던진 다트의 도착점 좌표

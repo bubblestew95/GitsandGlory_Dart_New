@@ -26,12 +26,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 이번 턴에서 던진 다트 수
     private int roundCnt = 1;
     // 현재 턴의 플레이어 키값.
-    private int curTurnPlayerKeyValue = 1;
+    private int curTurnPlayerKeyValue = 0;
     // 현재 턴의 플레이어 오브젝트 액터 넘버
     private int curTurnPlayerActorNum = 0;
 
-    // 마지막으로 던진 다트
-    private Dart lastThrowedDart = null;
+    // 마지막으로 던진 다트의 도착점
+    private Vector3 lastDartEndPoint = Vector3.zero;
 
     // 게임 오버 체크
     private bool isGameOver = false;
@@ -41,11 +41,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static GameManager Instance
     {
         get { return instance; }
-    }
-
-    public Dart LastThrowedDart
-    {
-        get { return lastThrowedDart; }
     }
 
     public bool IsGameOver
@@ -126,6 +121,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void ChangeTurnToNextPlayer()
     {
         ++turnCnt;
+
+        // 턴이 넘어갔으므로 라운드를 다시 1로 돌린다.
         roundCnt = 1;
 
         // 만약 다음 턴이 플레이어의 수보다 더 많다면 플레이어의 수만큼 턴이 돌았다는 뜻
@@ -136,18 +133,20 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        // 턴이 넘어갔으므로, 다음 턴 플레이어를 찾는다.
-        do
-        {
-            ++curTurnPlayerKeyValue;
-            // 다음 턴 플레이어 탐색 중에 최대 범위를 벗어나버리면 게임 종료 호출하면서 탈출.
-            if (curTurnPlayerKeyValue > PhotonNetwork.CurrentRoom.MaxPlayers)
-            {
-                EndGame();
-                return;
-            }
+        ++curTurnPlayerKeyValue;
 
-        } while (PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerKeyValue));
+        //// 턴이 넘어갔으므로, 다음 턴 플레이어를 찾는다.
+        //do
+        //{
+        //    ++curTurnPlayerKeyValue;
+        //    // 다음 턴 플레이어 탐색 중에 최대 범위를 벗어나버리면 게임 종료 호출하면서 탈출.
+        //    if (curTurnPlayerKeyValue > PhotonNetwork.CurrentRoom.PlayerCount)
+        //    {
+        //        EndGame();
+        //        return;
+        //    }
+
+        //} while (PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerKeyValue));
 
         // 다음 턴 플레이어 컨트롤러 오브젝트의 액터 넘버를 보관한다.
         curTurnPlayerActorNum = arr_PlayerCont[turnCnt - 1].photonView.OwnerActorNr;
@@ -159,7 +158,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         ++roundCnt;
 
-        Debug.LogFormat("Next Round : {0}", roundCnt);
+        Debug.LogFormat("Next Round : {0}", roundCnt <= 3 ? roundCnt : "Round Over");
 
         StartCoroutine(RoundReadyCoroutine());
 
@@ -191,7 +190,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         isNextRoundReady = false;
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
 
         isNextRoundReady = true;
     }
@@ -248,8 +247,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void UpdateLastDart()
+    public void UpdateLastDartEndPoint(Vector3 _pos)
     {
-
+        lastDartEndPoint = _pos;
     }
 }
