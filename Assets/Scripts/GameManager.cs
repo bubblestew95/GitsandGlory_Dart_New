@@ -39,9 +39,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int[] scoreTotals = null;
 
     /// <summary>
-    /// 각 플레이어의 인덱스를 등수에 따라 담는 배열
+    /// 각 플레이어의 등수를 플레이어의 순서에 따라 저장
     /// </summary>
-    private int[] playerRankIdxs = null;
+    private int[] arr_PlayerRank = null;
 
     /// <summary>
     /// 현재 턴 수
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         scoreTotals = new int[4];
 
-        playerRankIdxs = new int[4];
+        arr_PlayerRank = new int[4];
     }
 
     private void Start()
@@ -146,6 +146,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         audioSrc.Play();
+
+        UIManager.Instance.SetCurrentUI(PhotonNetwork.CurrentRoom.Players[turnCnt].NickName, roundCnt);
     }
 
     public override void OnPlayerLeftRoom(Player _otherPlayer)
@@ -222,12 +224,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void UpdateScores(int _score)
     {
         // 스코어 갱신
-        playerScores[turnCnt - 1,roundCnt - 1] = _score;
+        playerScores[turnCnt - 1, roundCnt - 1] = _score;
 
         scoreTotals[turnCnt - 1] += _score;
 
-        // 스코어 UI 업데이트
-        UIManager.Instance.UpdatePlayerScore(turnCnt - 1, roundCnt, _score, scoreTotals[turnCnt - 1]);
+        UIManager.Instance.UpdatePlayerScore(turnCnt - 1, roundCnt, playerScores[turnCnt - 1, roundCnt - 1], scoreTotals[turnCnt - 1]);
     }
 
     #endregion
@@ -303,13 +304,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// <returns></returns>
     private IEnumerator ShowGameEndUICoroutine()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         // 게임 종료 때 등수를 계산한다.
-        for(int i = 0; i < 4; ++i)
+        for(int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; ++i)
         {
             int rankIdx = 0;
-            for(int j = 0; j < 4; ++j)
+            for(int j = 0; j < PhotonNetwork.CurrentRoom.PlayerCount; ++j)
             {
                 if (i == j) continue;
 
@@ -317,13 +318,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                     ++rankIdx;
             }
 
-            playerRankIdxs[rankIdx] = i;
+            arr_PlayerRank[i] = rankIdx;
         }
         // 계산한 등수를 토대로 게임 오버 UI를 갱신한다.
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; ++i)
         {
-            int rankIdx = playerRankIdxs[i];
-            UIManager.Instance.SetResultUI(rankIdx, PhotonNetwork.CurrentRoom.Players[rankIdx + 1].NickName, scoreTotals[rankIdx]);
+            int rankIdx = arr_PlayerRank[i];
+            UIManager.Instance.SetResultUI(rankIdx, PhotonNetwork.CurrentRoom.Players[i + 1].NickName, scoreTotals[i]);
         }
 
         // 게임 오버 UI 출력
@@ -340,6 +341,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (roundCnt > 3)
             ChangeTurnToNextPlayer();
+
+        if(!isGameOver)
+            UIManager.Instance.SetCurrentUI(PhotonNetwork.CurrentRoom.Players[turnCnt].NickName, roundCnt);
     }
 
     private void SpawnPlayer()

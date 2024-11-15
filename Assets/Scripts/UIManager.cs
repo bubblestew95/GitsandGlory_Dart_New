@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour
     private PlayerScoreUI[] playerScoreUIs = null;
 
     [SerializeField]
+    private CurrentUI currentUI = null;
+
+    [SerializeField]
     private ResultUI resultUI = null;
 
     private static UIManager instance = null;
@@ -44,5 +47,11 @@ public class UIManager : MonoBehaviour
     public void ShowResultUI()
     {
         resultUI.gameObject.SetActive(true);
+    }
+
+    public void SetCurrentUI(string _name, int _round)
+    {
+        currentUI.SetCurrentPlayerText(_name);
+        currentUI.SetCurrentRoundText(_round);
     }
 }
