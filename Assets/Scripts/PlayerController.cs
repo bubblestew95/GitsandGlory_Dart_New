@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun
 {
@@ -15,6 +16,10 @@ public class PlayerController : MonoBehaviourPun
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("Game");
+        }
         // 게임이 끝난 상태면 리턴
         if (GameManager.Instance.IsGameOver) 
             return;
