@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Pointer : MonoBehaviour
@@ -11,7 +12,6 @@ public class Pointer : MonoBehaviour
     public float pointerRndRng = 80f;  // 흔들림 범위
     public float moveSpeed = 8f;      // 이동 속도 조절
 
-
     private void Start()
     {
         pointerPos = resetPos;  // 포인터 위치 초기화
@@ -21,6 +21,20 @@ public class Pointer : MonoBehaviour
     private void Update()
     {
         DrawPointer();
+    }
+
+    public Vector3 GetPointerWorldPos()
+    {
+        Vector3 pos = Camera.main.ScreenToWorldPoint(
+            new Vector3(
+                rectTr.position.x,
+                rectTr.position.y,
+                -Camera.main.transform.position.z)
+            );
+
+        // Debug.LogFormat("Rect Pos : {0}, {1}   World Pos : {2}, {3}", rectTr.position.x, rectTr.position.y, pos.x, pos.y);
+
+        return pos;
     }
 
     private void DrawPointer()
