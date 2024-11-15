@@ -52,12 +52,10 @@ public class PlayerController : MonoBehaviourPun
             int score = GameManager.Instance.ScoreEvaluate.EvaluateScore(dartEndPos);
 
             // 네트워크를 통해서 모든 오브젝트에게 다트 생성하도록 명령.
-            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.Euler(-89.9f, 0f, 0f));
+            GameObject dartGo = PhotonNetwork.Instantiate("P_Dart", dartStartPos, Quaternion.identity);
 
             // 다트 투척
             dartGo.GetComponent<Dart>().ThrowDart(dartStartPos, dartEndPos);
-
-            // 다트 투척 오디오 재생
 
             // 마지막으로 던진 다트의 도착점을 갱신
             GameManager.Instance.photonView.RPC("UpdateLastDartEndPoint", RpcTarget.All, dartEndPos);

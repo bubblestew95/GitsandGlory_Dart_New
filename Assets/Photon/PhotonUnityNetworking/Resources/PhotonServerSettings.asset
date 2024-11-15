@@ -40,16 +40,14 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - NextRound
-  - PlayerThrowDart
+  - PlayHitAudio
+  - PlayThrowAudio
   - RespawnSpaceship
-  - UpdateNicknameUIs
-  - UpdateLastDart
   - SetDartStartPos
   - UpdateLastDartEndPoint
+  - UpdateNicknameUIs
+  - UpdateScroes
   - UpdateScores
-  - PlayThrowAudio
-  - PlayHitSound
-  - PlayHitAudio
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

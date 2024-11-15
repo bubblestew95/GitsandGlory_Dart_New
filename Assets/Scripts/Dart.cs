@@ -7,7 +7,7 @@ public class Dart : MonoBehaviourPun
 {
     // 다트의 시작점에서 끝점까지 움직이는 데 걸리는 시간
     [SerializeField]
-    private float arrivedTime = 1f;
+    private float arrivedTime = 0.3f;
 
     // 포물선 궤적의 최대 높이
     [SerializeField]
@@ -49,17 +49,20 @@ public class Dart : MonoBehaviourPun
         //Vector3 curPos = Vector3.zero;
 
         Vector3 center = (startPos + endPos) * 0.5f;
-        center.y -= 10;
+        center.y -= 20;
         startPos -= center;
         endPos -= center;
 
-        
         float ratio = 0f;
 
         while (ratio <= arrivedTime)
         {
             //transform.position = Vector3.Lerp(startPos, endPos, ratio);
             transform.position = Vector3.Slerp(startPos, endPos, ratio);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                  Quaternion.LookRotation(endPos, startPos),
+                                                  Time.deltaTime);
+
             transform.position += center;
 
             ratio += Time.deltaTime / arrivedTime;
