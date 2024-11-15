@@ -13,6 +13,12 @@ public class Dart : MonoBehaviourPun
     [SerializeField]
     private float parabolaMaxHeight = 2f;
 
+    [SerializeField]
+    private AudioClip throwSound = null;
+
+    [SerializeField]
+    private AudioClip hitSound = null;
+
     private Vector3 dir = Vector3.zero;
     private Vector3 startPos = Vector3.zero;
     private Vector3 endPos = Vector3.zero;
@@ -26,6 +32,8 @@ public class Dart : MonoBehaviourPun
     // 추후에 포물선 발사 구현 가능?
     public void ThrowDart(Vector3 _startPos, Vector3 _endPos)
     {
+        photonView.RPC("PlayThrowAudio", RpcTarget.All);
+
         dir = (_endPos - _startPos).normalized;
         startPos = _startPos;
         endPos = _endPos;
@@ -57,6 +65,29 @@ public class Dart : MonoBehaviourPun
             ratio += Time.deltaTime / arrivedTime;
 
             yield return null;
+        }
+
+        photonView.RPC("PlayHitAudio", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void PlayThrowAudio()
+    {
+        if(throwSound)
+        {
+            // Bgm 없으면 이거
+            GameManager.Instance.AudioSrc.PlayOneShot(throwSound);
+        }
+
+    }
+
+    [PunRPC]
+    private void PlayHitAudio()
+    {
+        if(hitSound)
+        {
+            // Bgm 없으면 이거
+            GameManager.Instance.AudioSrc.PlayOneShot(hitSound);
         }
     }
 }
