@@ -11,7 +11,6 @@ public class ScoreEvaluate
     //음수 없이 세팅, degree출력
     private float CalculateAngle(float x, float y) => (Mathf.Atan2(x, y) * Mathf.Rad2Deg + 360) % 360;
 
-
     private int ScoreDecision(int _scoreNumber, Vector2 _coordinate)
     {
         int score = 0;
@@ -38,7 +37,6 @@ public class ScoreEvaluate
         return score;
     }
 
-
     private int ScoreNumber(Vector2 _coordinate)
     {
         int rate = 18;
@@ -61,6 +59,11 @@ public class ScoreEvaluate
         return scoreNumber;
     }
 
+    /// <summary>
+    /// 2차원 벡터를 받아서 다트판에서의 점수를 판정함.
+    /// </summary>
+    /// <param name="_coordinate">점수를 판정할 포지션의 x,y 벡터</param>
+    /// <returns></returns>
     public int EvaluateScore(Vector2 _coordinate)
     {
         if (coordinate == null)

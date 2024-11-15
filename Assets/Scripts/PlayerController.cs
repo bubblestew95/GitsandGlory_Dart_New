@@ -34,14 +34,9 @@ public class PlayerController : MonoBehaviourPun
         if (Input.GetMouseButtonDown(0))
         {
             {
-                //dartStartPos = Camera.main.ScreenToWorldPoint(
-                //    new Vector3(Input.mousePosition.x,
-                //    Input.mousePosition.y,
-                //    -Camera.main.transform.position.z)
-                //    );
                 dartStartPos = GameManager.Instance.PointerUI.GetPointerWorldPos();
                 dartStartPos.z = -20f;
-            }// 스크린 상 마우스 포지션을 다트 투척 시작점으로 설정. 추후 조준점 UI 생길 시 해당 위치로 업데이트 예정.
+            }
 
             photonView.RPC("SetDartStartPos", RpcTarget.Others, dartStartPos);
 
@@ -53,7 +48,6 @@ public class PlayerController : MonoBehaviourPun
 
             // 다트 투척
             dartGo.GetComponent<Dart>().ThrowDart(dartStartPos, dartEndPos);
-            // photonView.RPC("PlayerThrowDart", RpcTarget.All, dartThrowPos);
 
             // 마지막으로 던진 다트의 도착점을 갱신
             GameManager.Instance.photonView.RPC("UpdateLastDartEndPoint", RpcTarget.All, dartEndPos);

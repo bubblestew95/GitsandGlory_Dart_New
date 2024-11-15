@@ -30,9 +30,6 @@ public class UIManager : MonoBehaviour
         total.text = "totalScore" + player.totalScore.ToString();
     }
 
-
-
-
     // 점수 배열을 관리
     private int[] scores = new int[3];
 

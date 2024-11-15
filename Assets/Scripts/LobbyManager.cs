@@ -65,7 +65,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         titleGo?.SetActive(false);
         // 로비 UI를 켠다.
         lobbyGo?.SetActive(true);
-        // 로비의 플레이어 리스트를 갱신한다. (RPC?)
+        // 로비의 플레이어 리스트를 갱신한다.
         photonView.RPC("UpdateNicknameUIs", RpcTarget.All);
     }
 
@@ -120,14 +120,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void UpdateNicknameUIs()
     {
         string[] curRoomNickNames = new string[maxPlayerPerRoom];
+        int myIdx = 0;
 
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; ++i)
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; ++i)
         {
             curRoomNickNames[i] = PhotonNetwork.PlayerList[i].NickName;
+            if (photonView.IsMine) myIdx = i;
             Debug.Log(curRoomNickNames[i]);
         }
 
-        lobbyUIManager.UpdateNicknameUIs(curRoomNickNames);
+        lobbyUIManager.UpdateNicknameUIs(curRoomNickNames, myIdx);
     }
 
     private void CreateNewRoom()

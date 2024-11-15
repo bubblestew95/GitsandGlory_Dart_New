@@ -129,6 +129,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     // 턴을 다음 플레이어에게 넘긴다.
     public void ChangeTurnToNextPlayer()
     {
+        // 현재 던져진 다트들을 모두 지운다.
+        Dart[] throwedDarts = FindObjectsByType<Dart>(FindObjectsSortMode.None);
+
+        foreach(Dart dart in throwedDarts)
+        {
+            Destroy(dart.gameObject);
+        }
+
         ++turnCnt;
 
         // 턴이 넘어갔으므로 라운드를 다시 1로 돌린다.
@@ -158,7 +166,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         //} while (PhotonNetwork.CurrentRoom.Players.ContainsKey(curTurnPlayerKeyValue));
 
         // 다음 턴 플레이어 컨트롤러 오브젝트의 액터 넘버를 보관한다.
-        curTurnPlayerActorNum = arr_PlayerCont[turnCnt - 1].photonView.OwnerActorNr;
+        if (arr_PlayerCont[turnCnt - 1] != null)
+        {
+            curTurnPlayerActorNum = arr_PlayerCont[turnCnt - 1].photonView.OwnerActorNr;
+        }
     }
 
     // 네트워크의 모든 클라이언트에게 라운드를 넘기라고 지시.
@@ -170,9 +181,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.LogFormat("Next Round : {0}", roundCnt <= 3 ? roundCnt : "Round Over");
 
         StartCoroutine(RoundReadyCoroutine());
-
-        if (roundCnt > 3)
-            ChangeTurnToNextPlayer();
     }
 
     // 게임 끝. 게임 기능 비활성화하고 순위를 출력한다.
@@ -202,6 +210,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2.0f);
 
         isNextRoundReady = true;
+
+        if (roundCnt > 3)
+            ChangeTurnToNextPlayer();
     }
 
     private void SpawnPlayer()

@@ -14,7 +14,6 @@ public class DartGameManager : MonoBehaviour
 
     private void Awake()
     {
-        scoreEvaluate = new ScoreEvaluate();
         if (Instance == null)
         {
             Instance = this;
@@ -24,14 +23,12 @@ public class DartGameManager : MonoBehaviour
             Destroy(gameObject);  // 중복된 GameManager가 생기지 않도록 함
         }
 
+        scoreEvaluate = new ScoreEvaluate();
+
         // 점수를 0으로 초기화
         scores[0] = 0;
         scores[1] = 0;
         scores[2] = 0;
-    }
-    private void Update()
-    {
-        TestCoordinate();
     }
 
     // 플레이어의 점수를 업데이트하는 함수
@@ -46,32 +43,6 @@ public class DartGameManager : MonoBehaviour
         // 턴 종료 후 처리할 로직 (예: 다음 플레이어로 넘어가기)
         // 예시: 게임 종료 시
         Debug.Log("Turn Ended. Player's score: " + player.totalScore);
-    }
-
-    public void TestCoordinate()
-    {
-        Vector2 coordinate = Vector2.zero;
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            coordinate = new Vector2(
-                Random.Range(-10.00f, 10.00f),
-                Random.Range(-10.00f, 10.00f)
-                );
-            Debug.Log("coordinate : " + coordinate);
-
-            int score = scoreEvaluate.EvaluateScore(coordinate);
-
-            // 점수를 배열에 저장
-            if (scoreIndex < 3)
-            {
-                scores[scoreIndex] = score;
-                scoreIndex++;
-            }
-
-            // 점수를 UIManager를 통해 UI에 반영
-            uiManager.UpdateScoreUI(scores);
-
-        }
     }
 
 }
