@@ -8,7 +8,7 @@ public class ScoreEvaluate
     private float length = 0;
     private float angle = 0;
     private float CalculateLength(float x, float y) => Mathf.Sqrt((x * x) + (y * y));
-
+    //음수 없이 세팅, degree출력
     private float CalculateAngle(float x, float y) => (Mathf.Atan2(x, y) * Mathf.Rad2Deg + 360) % 360;
 
 
@@ -19,17 +19,17 @@ public class ScoreEvaluate
         //Debug.Log("length: " + length);
 
         // length 값에 따른 점수 테이블
-        if (length > 0 && length <= 1)
+        if (length > 0 && length <= 0.42)
             score = 50;
-        else if (length > 1 && length <= 2)
+        else if (length > 0.42 && length <= 0.9)
             score = 30;
-        else if (length > 2 && length <= 5)
+        else if (length > 0.9 && length <= 5.75)
             score = _scoreNumber;
-        else if (length > 5 && length <= 6)
+        else if (length > 5.75 && length <= 6.64)
             score = _scoreNumber * 2;
-        else if (length > 7 && length <= 9)
+        else if (length > 6.64 && length <= 9.08)
             score = _scoreNumber;
-        else if (length > 9 && length <= 10)
+        else if (length > 9.08 && length <= 10)
             score = _scoreNumber * 3;
         else
             score = 0;

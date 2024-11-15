@@ -31,7 +31,7 @@ public class DartGameManager : MonoBehaviour
     }
     private void Update()
     {
-        TestCoodinate();
+        TestCoordinate();
     }
 
     // 플레이어의 점수를 업데이트하는 함수
@@ -48,7 +48,7 @@ public class DartGameManager : MonoBehaviour
         Debug.Log("Turn Ended. Player's score: " + player.totalScore);
     }
 
-    public void TestCoodinate()
+    public void TestCoordinate()
     {
         Vector2 coordinate = Vector2.zero;
         if (Input.GetKeyDown(KeyCode.Space))
