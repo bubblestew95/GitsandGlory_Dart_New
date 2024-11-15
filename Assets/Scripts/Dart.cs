@@ -41,7 +41,7 @@ public class Dart : MonoBehaviourPun
         //Vector3 curPos = Vector3.zero;
 
         Vector3 center = (startPos + endPos) * 0.5f;
-        center.y -= 10;
+        center.y -= 20;
         startPos -= center;
         endPos -= center;
 
